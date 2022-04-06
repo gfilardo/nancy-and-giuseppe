@@ -1220,7 +1220,217 @@ ASSICURAZIONE SANITARIA &gt;<br />
         <h2 class='page-title'>{{ rsvp.page_title }}</h2>
     </div>
     <div id="rsvp-form" class="twelve columns offset-by-two">
-      <div id="RileyGreySmartRsvp" ng-class="{&#39;full-width-selects-enabled&#39;: rsvp.full_width_selects_enabled}"><input class="the_bot_address1" id="the_bot_detect" name="the_bot_detect" placeholder="Detect" type="hidden" value="" /><div class="section"><span class="rsvp-copy" ng-bind-html="rsvp.rsvp_text" style="font-size:18pt;padding:32px 0;display:inline-block"></span></div><div class="section" ng-show="rsvp.attending_enabled &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))"><span>I, </span><span ng-if="!isGuest()"><input ng-model="rsvp.attending_name" placeholder="your name here" type="text" /></span><span ng-if="isGuest()"><input ng-hide="rsvp.attending_name_locked" ng-model="rsvp.attending_name" placeholder="{{ rsvp.guest.full_name }}" type="text" /><span ng-show="rsvp.attending_name_locked">{{rsvp.guest.full_name}}</span><span>, </span></span><select ng-model="rsvp.attending_response" ng-options="option.value as option.name for option in rsvp.attending_options"></select><span> the festivities.</span></div><div ng-show="rsvp.attending_enabled"><div class="section" ng-if="showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending() &amp;&amp; rsvp.guests_enabled &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; hasPlusOnes() &amp;&amp; !hasDefinedPlusOnes())) &amp;&amp; rsvp.attending_response != &#39;AM NOT&#39;"><div ng-hide="rsvp.guest &amp;&amp; rsvp.guest.guests_allowed == 0" style="display: inline;"><span> My </span><span> {{ rsvp.attending_invitation_type }} </span><span> mentioned I could bring </span><select ng-change="populateGuestArray()" ng-model="rsvp.attending_can_bring_response" ng-options="option.value as option.name for option in rsvp.attending_can_bring_options" ng-show="rsvp.attending_can_bring_options &amp;&amp; rsvp.attending_can_bring_options.length &gt; 0 &amp;&amp; rsvp.attending_can_bring_options[0].value != &#39; &#39; &amp;&amp; rsvp.attending_can_bring_options[0].value != &#39;&#39;"></select><span ng-show="getGuestCount() &gt; 0 &amp;&amp; rsvp.attending_response == &#39;AM&#39;">, so I’ll be bringing:</span><span ng-show="getGuestCount() &gt; 0 &amp;&amp; rsvp.attending_response == &#39;MAYBE&#39;">, so I may be bringing:</span><div ng-repeat="person in rsvp.attending_bringing_list"><input ng-disabled="isDefinedPlusOne(person)" ng-model="person.name" placeholder="Guest #{{$index+1}}" type="text" /></div><span ng-show="getGuestCount() == 0">.</span></div></div><div class="section" ng-if="showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending() &amp;&amp; rsvp.show_event_selector &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))"><span ng-if="rsvp.attending_response == &#39;AM&#39;">I will be attending</span><span ng-if="rsvp.attending_response == &#39;MAYBE&#39;">I may be attending</span> <span>for</span> <dropdown-menu list-items="rsvp.events" name="attending_events" ng-model="rsvp.attending_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized" uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period">.</span></div><div class="section" ng-if="rsvp.guest &amp;&amp; rsvp.guest.is_group_party"> <span>{{rsvp.guest.full_name}}</span> <select id="rsvp-attending-response" ng-model="rsvp.attending_response" ng-options="option.value as option.name for option in rsvp.guest_attending_options"></select> <span ng-if="rsvp.attending_response !== &#39;AM NOT&#39; &amp;&amp; rsvp.show_event_selector">attending for</span>  <span ng-if="rsvp.attending_response === &#39;AM NOT&#39; || !rsvp.show_event_selector">attending.</span> <nobr><dropdown-menu list-items="rsvp.events" name="rsvp_attending_events" ng-if="rsvp.attending_response !== &#39;AM NOT&#39; &amp;&amp; rsvp.show_event_selector" ng-model="rsvp.attending_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized" uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period" ng-if="rsvp.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">.</span></nobr></div><div class="section" ng-if="guest.name != &#39;&#39; &amp;&amp; (rsvp.show_event_selector || hasDefinedPlusOnes()) &amp;&amp; showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending()" ng-repeat="guest in rsvp.attending_bringing_list"> <span>{{guest.name}}</span> <select id="guest-attending-response-{{$index}}" ng-if="isDefinedPlusOne(guest)" ng-model="guest.attending_response" ng-options="option.value as option.name for option in rsvp.guest_attending_options"></select> <span ng-if="!isDefinedPlusOne(guest) &amp;&amp; rsvp.attending_response == &#39;AM&#39;">will be</span>  <span ng-if="!isDefinedPlusOne(guest) &amp;&amp; rsvp.attending_response == &#39;MAYBE&#39;">may be</span>  <span ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">attending for</span>  <span ng-if="guest.attending_response != &#39;AM&#39; || !rsvp.show_event_selector">attending.</span> <nobr><dropdown-menu guest-name="{{guest.name}}" list-items="rsvp.events" name="guest_attending_events_{{$index}}" ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector" ng-model="guest.attending_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized" uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period" ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">.</span></nobr></div></div><div ng-show="(rsvp.attending_response != &#39;AM NOT&#39; || (rsvp.guest &amp;&amp; (rsvp.guest &amp;&amp; rsvp.guest.is_group_party &amp;&amp; !allPeopleAreNotAttending()))) || rsvp.attending_enabled != true"><div class="section" ng-show="rsvp.travel_enabled"><span ng-show="getGuestCount() == 0">I’ll</span><span ng-show="getGuestCount() &gt; 0">We’ll</span><span> be arriving via </span><select ng-if="rsvp.travel_methods" ng-model="rsvp.travel_method_response" ng-options="option.value as option.name for option in rsvp.travel_methods"></select><span> at </span><input ng-model="rsvp.travel_method_time" placeholder="&#39;3pm&#39;, &#39;afternoon&#39;, etc." type="text" /><span> on </span><input ng-model="rsvp.travel_method_date" placeholder="&#39;Friday&#39;, &#39;03/28&#39;, etc." type="text">.<div ng-if="rsvp.travel_ask_flight_number"><span ng-show="showAdditionalTravelSection()"><span ng-show="getGuestCount() == 0">My {{getTravelMethodResponse(rsvp.travel_method_response) | lowercase}}</span><span ng-show="getGuestCount() &gt; 0">Our {{getTravelMethodResponse(rsvp.travel_method_response) | lowercase}}</span><span> information is</span><input ng-model="rsvp.travel_flight_number_response" placeholder="&#39;Delta Flight 123&#39;, etc." type="text">.</input></span></div></input></div><div class="section" ng-show="rsvp.travel_departure_enabled"><span ng-show="getGuestCount() == 0">I’ll</span><span ng-show="getGuestCount() &gt; 0">We’ll</span><span> be departing via </span><select ng-if="rsvp.travel_departure_methods" ng-model="rsvp.travel_departure_method_response" ng-options="option.value as option.name for option in rsvp.travel_departure_methods"></select><span> at </span><input ng-model="rsvp.travel_departure_method_time" placeholder="&#39;3pm&#39;, &#39;afternoon&#39;, etc." type="text" /><span> on </span><input ng-model="rsvp.travel_departure_method_date" placeholder="&#39;Friday&#39;, &#39;03/28&#39;, etc." type="text">.<div ng-if="rsvp.travel_departure_ask_flight_number"><span ng-show="rsvp.travel_departure_method_response != &#39;Car&#39;"><span ng-show="getGuestCount() == 0">My {{getTravelMethodResponse(rsvp.travel_departure_method_response) | lowercase}}</span><span ng-show="getGuestCount() &gt; 0">Our {{getTravelMethodResponse(rsvp.travel_departure_method_response) | lowercase}}</span><span> information is</span><input ng-model="rsvp.travel_departure_flight_number_response" placeholder="&#39;Delta Flight 123&#39;, etc." type="text">.</input></span></div></input></div><div class="section" ng-show="rsvp.transportation_enabled"><span ng-show="getGuestCount() == 0">I</span><span ng-show="getGuestCount() &gt; 0">We</span><span> need a ride on the {{ rsvp.transportation_method }} for </span><dropdown-menu list-items="rsvp.transportation_events_options" name="transporation_events" ng-model="rsvp.transporation_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized" uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period">.</span></div><div class="section" ng-show="rsvp.hotels_enabled"><span ng-show="getGuestCount() == 0">I’ll </span><span ng-show="getGuestCount() &gt; 0">We’ll </span><span> be hanging </span><span ng-show="getGuestCount() == 0">my hat </span><span ng-show="getGuestCount() &gt; 0">our hats </span><span>at </span><input ng-model="rsvp.hotel_location" placeholder="where you’re staying" type="text">.</input></div><div ng-show="rsvp.food_enabled"><div ng-if="(!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))"><div class="section" ng-show="rsvp.food_appetizer_enabled"> <span>{{ rsvp.rsvp_translations.rsvp_lib_food_appetizer }}</span> <select ng-model="rsvp.food_appetizer_my_response" ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select><span>.</span></div><div class="section" ng-show="rsvp.food_entree_enabled"> <span>{{ rsvp.rsvp_translations.rsvp_lib_food_entree }}</span> <select ng-model="rsvp.food_entree_my_response" ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span>.</span></div><div class="section" ng-show="rsvp.food_dessert_enabled"> <span>{{ rsvp.rsvp_translations.rsvp_lib_food_dessert }}</span> <select ng-model="rsvp.food_dessert_my_response" ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>.</span></div></div><div class="guest-food section" ng-if="rsvp.guest &amp;&amp; rsvp.guest.is_group_party &amp;&amp; rsvp.attending_response != &#39;AM NOT&#39;"><span><span>{{rsvp.guest.full_name}} will have the </span><span ng-show="rsvp.food_appetizer_enabled"><select ng-model="rsvp.food_appetizer_my_response" ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select> <span ng-show="logicalXOR(rsvp.food_entree_enabled, rsvp.food_dessert_enabled)">and</span> <span ng-show="rsvp.food_entree_enabled &amp;&amp; rsvp.food_dessert_enabled">,  </span><span ng-show="!rsvp.food_entree_enabled &amp;&amp; !rsvp.food_dessert_enabled">. </span></span><span ng-show="rsvp.food_entree_enabled"><select ng-model="rsvp.food_entree_my_response" ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span ng-show="rsvp.food_dessert_enabled">,  </span><span ng-show="!rsvp.food_dessert_enabled">.</span></span><span ng-show="rsvp.food_dessert_enabled"><span ng-show="rsvp.food_appetizer_enabled || rsvp.food_entree_enabled"> and </span><select ng-model="rsvp.food_dessert_my_response" ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>. </span></span></span></div><div class="guest-food section" ng-if="person.name != &#39;&#39; &amp;&amp; (person.attending_response == null || person.attending_response == &#39;AM&#39;)" ng-repeat="person in rsvp.attending_bringing_list"><span><span ng-show="rsvp.food_appetizer_enabled || rsvp.food_entree_enabled || rsvp.food_dessert_enabled">{{person.name}} will have the </span><span ng-show="rsvp.food_appetizer_enabled"><select ng-model="rsvp.food_appetizer_guest_response[$index]" ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select> <span ng-show="logicalXOR(rsvp.food_entree_enabled, rsvp.food_dessert_enabled)">and</span> <span ng-show="rsvp.food_entree_enabled &amp;&amp; rsvp.food_dessert_enabled">, </span><span ng-show="!rsvp.food_entree_enabled &amp;&amp; !rsvp.food_dessert_enabled">. </span></span><span ng-show="rsvp.food_entree_enabled"><select ng-model="rsvp.food_entree_guest_response[$index]" ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span ng-show="!rsvp.food_dessert_enabled">. </span></span><span ng-show="rsvp.food_dessert_enabled"> <span ng-show="logicalXOR(rsvp.food_appetizer_enabled || rsvp.food_entree_enabled) &amp;&amp; rsvp.food_entree_enabled">and</span> <select ng-model="rsvp.food_dessert_guest_response[$index]" ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>. </span></span></span></div></div><div class="section" ng-show="rsvp.food_allergy_enabled"><span ng-show="getGuestCount() == 0">I </span><span ng-show="getGuestCount() &gt; 0">We </span><select ng-model="rsvp.food_allergy_response" ng-options="option.value as option.name for option in rsvp.food_allergy_options"></select> <span>{{ rsvp.rsvp_translations.rsvp_lib_food_allergy_have }}</span><span ng-show="rsvp.food_allergy_response == &#39;DO NOT&#39;">.</span><span ng-show="rsvp.food_allergy_response == &#39;DO&#39;">:  </span><span class="food-allergy-container" ng-show="rsvp.food_allergy_response == &#39;DO&#39;"><textarea ng-model="rsvp.food_allergy_explanation" placeholder="Please explain the dietary restriction" style="vertical-align:middle;"></textarea></span></div><div class="section" ng-show="rsvp.gift_enabled"><span>You will love the super awesome</span><input ng-model="rsvp.gift_item_response" placeholder="gift" type="text" /><span ng-show="getGuestCount() == 0">I </span><span ng-show="getGuestCount() &gt; 0">we</span><span> got you from your registry at </span><input ng-model="rsvp.gift_store_response" placeholder="registry / store" type="text">.</input></div><div class="section" ng-show="rsvp.song_enabled"><span>You’ll find </span><span ng-show="getGuestCount() == 0">me </span><span ng-show="getGuestCount() &gt; 0">us </span><span> on the dance floor when they play </span><input ng-model="rsvp.song_response" placeholder="song name" type="text">.</input></div><div class="section" id="contact" ng-show="rsvp.contact_enabled &amp;&amp; (rsvp.contact_ask_name || rsvp.contact_ask_email || rsvp.contact_ask_phone || rsvp.contact_ask_address)"><span ng-show="rsvp.contact_ask_name"><span class="contactim">I’m </span><input ng-model="rsvp.contact_name_response" placeholder="your name" type="text" /><span class="contactperiod">.</span></span><span ng-if="rsvp.contact_ask_email || rsvp.contact_ask_phone || rsvp.contact_ask_address"><span class="text"> You can ping me, ring me, or bring me more info at: </span></span><div class="contact-details"><span ng-show="rsvp.contact_ask_email"><input class="email" ng-model="rsvp.contact_email_response" placeholder="myemail@example.com" type="text" /></span><div ng-show="rsvp.contact_ask_phone"><input ng-model="rsvp.contact_phone_response" placeholder="(555) 555-1234" type="text" /></div><div ng-show="rsvp.contact_ask_address"><input ng-model="rsvp.contact_address1_response" placeholder="222 Broadway" type="text" /><input ng-model="rsvp.contact_address2_response" placeholder="New York, NY 10038" type="text" /><input ng-model="rsvp.contact_address3_response" ng-show="rsvp.contact_ask_address_lines == &#39;3&#39;" placeholder="United States" type="text" /></div></div></div></div><div class="section" id="custom" ng-repeat="customSection in rsvp.custom_sections track by $index" ng-show="rsvp.custom_enabled"><span ng-show="rsvp.attending_response != &#39;AM NOT&#39; || customSection.nonattending_enabled" style="display:block;"><div><span ng-bind-html="customSection.copy" style="word-break: break-word;"></span><br /><span ng-if="customSection.response_type == &#39;1&#39;"><textarea ng-model="customSection.response"></textarea></span><span ng-if="customSection.response_type == &#39;2&#39;"><select ng-model="customSection.dropdown_response" ng-options="option.value as option.value for option in customSection.dropdown_options"></select></span><span ng-if="customSection.response_type == &#39;3&#39;"><dropdown-menu list-items="getCustomSectionMultiSelectorOptions(customSection)" name="custom_section_dropdown_{{$index}}" ng-model="customSection.dropdown_responses" noun="&#39;selection&#39;" nounp="&#39;selections&#39;" uncheck-all="true"></dropdown-menu></span></div></span><div ng-if="$last" style="margin-bottom: 60px;"></div></div><button id="rg-rsvp-v3-submit" ng-click="submitRsvp()">Submit</button></div><script id="dropdownMenu.html" type="text/ng-template"><div class="ng-dropdown-menu" data-guest-name="{{ guestName }}" id="{{ name }}"><select class="highlight" id="{{ name }}-a" ng-model="fakeSelectOption" ng-options="o for o in options"></select><div class="dropdown-menu-panel" id="{{ name }}-b" ng-class="{&#39;should-hide&#39;: shouldHide}"><div class="optional"><span class="close" ng-click="shouldHide = !shouldHide">&#10006</span><div class="items"><nobr ng-repeat="item in listItems track by $index" style="display: block;"><input check-list="ngModel" class="select-days-box" ng-checked="ngModel.indexOf(item) != -1" type="checkbox" value="{{ item }}" /><span class="delegate-label">{{ item }}</span></nobr></div></div></div></div></script>
+      <div id="RileyGreySmartRsvp" ng-class="{&#39;full-width-selects-enabled&#39;: rsvp.full_width_selects_enabled}"><input
+          class="the_bot_address1" id="the_bot_detect" name="the_bot_detect" placeholder="Detect" type="hidden" value="" />
+        <div class="section"><span class="rsvp-copy" ng-bind-html="rsvp.rsvp_text"
+            style="font-size:18pt;padding:32px 0;display:inline-block"></span></div>
+        <div class="section"
+          ng-show="rsvp.attending_enabled &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))">
+          <span>I, </span><span ng-if="!isGuest()"><input ng-model="rsvp.attending_name" placeholder="your name here"
+              type="text" /></span><span ng-if="isGuest()"><input ng-hide="rsvp.attending_name_locked"
+              ng-model="rsvp.attending_name" placeholder="{{ rsvp.guest.full_name }}" type="text" /><span
+              ng-show="rsvp.attending_name_locked">{{rsvp.guest.full_name}}</span><span>, </span></span><select
+            ng-model="rsvp.attending_response"
+            ng-options="option.value as option.name for option in rsvp.attending_options"></select><span> the
+            festivities.</span></div>
+        <div ng-show="rsvp.attending_enabled">
+          <div class="section"
+            ng-if="showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending() &amp;&amp; rsvp.guests_enabled &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; hasPlusOnes() &amp;&amp; !hasDefinedPlusOnes())) &amp;&amp; rsvp.attending_response != &#39;AM NOT&#39;">
+            <div ng-hide="rsvp.guest &amp;&amp; rsvp.guest.guests_allowed == 0" style="display: inline;"><span> My
+              </span><span> {{ rsvp.attending_invitation_type }} </span><span> mentioned I could bring </span><select
+                ng-change="populateGuestArray()" ng-model="rsvp.attending_can_bring_response"
+                ng-options="option.value as option.name for option in rsvp.attending_can_bring_options"
+                ng-show="rsvp.attending_can_bring_options &amp;&amp; rsvp.attending_can_bring_options.length &gt; 0 &amp;&amp; rsvp.attending_can_bring_options[0].value != &#39; &#39; &amp;&amp; rsvp.attending_can_bring_options[0].value != &#39;&#39;"></select><span
+                ng-show="getGuestCount() &gt; 0 &amp;&amp; rsvp.attending_response == &#39;AM&#39;">, so I’ll be
+                bringing:</span><span
+                ng-show="getGuestCount() &gt; 0 &amp;&amp; rsvp.attending_response == &#39;MAYBE&#39;">, so I may be
+                bringing:</span>
+              <div ng-repeat="person in rsvp.attending_bringing_list"><input ng-disabled="isDefinedPlusOne(person)"
+                  ng-model="person.name" placeholder="Guest #{{$index+1}}" type="text" /></div><span
+                ng-show="getGuestCount() == 0">.</span>
+            </div>
+          </div>
+          <div class="section"
+            ng-if="showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending() &amp;&amp; rsvp.show_event_selector &amp;&amp; (!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))">
+            <span ng-if="rsvp.attending_response == &#39;AM&#39;">I will be attending</span><span
+              ng-if="rsvp.attending_response == &#39;MAYBE&#39;">I may be attending</span> <span>for</span>
+            <dropdown-menu list-items="rsvp.events" name="attending_events" ng-model="rsvp.attending_events"
+              noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized" uncheck-all="rsvp.uncheck_all_events">
+            </dropdown-menu><span class="period">.</span>
+          </div>
+          <div class="section" ng-if="rsvp.guest &amp;&amp; rsvp.guest.is_group_party">
+            <span>{{rsvp.guest.full_name}}</span> <select id="rsvp-attending-response" ng-model="rsvp.attending_response"
+              ng-options="option.value as option.name for option in rsvp.guest_attending_options"></select> <span
+              ng-if="rsvp.attending_response !== &#39;AM NOT&#39; &amp;&amp; rsvp.show_event_selector">attending for</span>
+            <span ng-if="rsvp.attending_response === &#39;AM NOT&#39; || !rsvp.show_event_selector">attending.</span>
+            <nobr>
+              <dropdown-menu list-items="rsvp.events" name="rsvp_attending_events"
+                ng-if="rsvp.attending_response !== &#39;AM NOT&#39; &amp;&amp; rsvp.show_event_selector"
+                ng-model="rsvp.attending_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized"
+                uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period"
+                ng-if="rsvp.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">.</span>
+            </nobr>
+          </div>
+          <div class="section"
+            ng-if="guest.name != &#39;&#39; &amp;&amp; (rsvp.show_event_selector || hasDefinedPlusOnes()) &amp;&amp; showIfPrimaryGuestIsAttendingOrSomeoneWithinGroupIsAttending()"
+            ng-repeat="guest in rsvp.attending_bringing_list"> <span>{{guest.name}}</span> <select
+              id="guest-attending-response-{{$index}}" ng-if="isDefinedPlusOne(guest)" ng-model="guest.attending_response"
+              ng-options="option.value as option.name for option in rsvp.guest_attending_options"></select> <span
+              ng-if="!isDefinedPlusOne(guest) &amp;&amp; rsvp.attending_response == &#39;AM&#39;">will be</span> <span
+              ng-if="!isDefinedPlusOne(guest) &amp;&amp; rsvp.attending_response == &#39;MAYBE&#39;">may be</span> <span
+              ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">attending for</span>
+            <span ng-if="guest.attending_response != &#39;AM&#39; || !rsvp.show_event_selector">attending.</span>
+            <nobr>
+              <dropdown-menu guest-name="{{guest.name}}" list-items="rsvp.events" name="guest_attending_events_{{$index}}"
+                ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector"
+                ng-model="guest.attending_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized"
+                uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period"
+                ng-if="guest.attending_response == &#39;AM&#39; &amp;&amp; rsvp.show_event_selector">.</span>
+            </nobr>
+          </div>
+        </div>
+        <div
+          ng-show="(rsvp.attending_response != &#39;AM NOT&#39; || (rsvp.guest &amp;&amp; (rsvp.guest &amp;&amp; rsvp.guest.is_group_party &amp;&amp; !allPeopleAreNotAttending()))) || rsvp.attending_enabled != true">
+          <div class="section" ng-show="rsvp.travel_enabled"><span ng-show="getGuestCount() == 0">I’ll</span><span
+              ng-show="getGuestCount() &gt; 0">We’ll</span><span> be arriving via </span><select ng-if="rsvp.travel_methods"
+              ng-model="rsvp.travel_method_response"
+              ng-options="option.value as option.name for option in rsvp.travel_methods"></select><span> at </span><input
+              ng-model="rsvp.travel_method_time" placeholder="&#39;3pm&#39;, &#39;afternoon&#39;, etc." type="text" /><span>
+              on </span><input ng-model="rsvp.travel_method_date" placeholder="&#39;Friday&#39;, &#39;03/28&#39;, etc."
+              type="text">.<div ng-if="rsvp.travel_ask_flight_number"><span ng-show="showAdditionalTravelSection()"><span
+                  ng-show="getGuestCount() == 0">My {{getTravelMethodResponse(rsvp.travel_method_response) |
+                  lowercase}}</span><span ng-show="getGuestCount() &gt; 0">Our
+                  {{getTravelMethodResponse(rsvp.travel_method_response) | lowercase}}</span><span> information
+                  is</span><input ng-model="rsvp.travel_flight_number_response"
+                  placeholder="&#39;Delta Flight 123&#39;, etc." type="text">.</input></span></div></input></div>
+          <div class="section" ng-show="rsvp.travel_departure_enabled"><span ng-show="getGuestCount() == 0">I’ll</span><span
+              ng-show="getGuestCount() &gt; 0">We’ll</span><span> be departing via </span><select
+              ng-if="rsvp.travel_departure_methods" ng-model="rsvp.travel_departure_method_response"
+              ng-options="option.value as option.name for option in rsvp.travel_departure_methods"></select><span> at
+            </span><input ng-model="rsvp.travel_departure_method_time"
+              placeholder="&#39;3pm&#39;, &#39;afternoon&#39;, etc." type="text" /><span> on </span><input
+              ng-model="rsvp.travel_departure_method_date" placeholder="&#39;Friday&#39;, &#39;03/28&#39;, etc."
+              type="text">.<div ng-if="rsvp.travel_departure_ask_flight_number"><span
+                ng-show="rsvp.travel_departure_method_response != &#39;Car&#39;"><span ng-show="getGuestCount() == 0">My
+                  {{getTravelMethodResponse(rsvp.travel_departure_method_response) | lowercase}}</span><span
+                  ng-show="getGuestCount() &gt; 0">Our {{getTravelMethodResponse(rsvp.travel_departure_method_response) |
+                  lowercase}}</span><span> information is</span><input
+                  ng-model="rsvp.travel_departure_flight_number_response" placeholder="&#39;Delta Flight 123&#39;, etc."
+                  type="text">.</input></span></div></input></div>
+          <div class="section" ng-show="rsvp.transportation_enabled"><span ng-show="getGuestCount() == 0">I</span><span
+              ng-show="getGuestCount() &gt; 0">We</span><span> need a ride on the {{ rsvp.transportation_method }} for
+            </span>
+            <dropdown-menu list-items="rsvp.transportation_events_options" name="transporation_events"
+              ng-model="rsvp.transporation_events" noun="rsvp.attending_noun" nounp="rsvp.attending_noun_pluralized"
+              uncheck-all="rsvp.uncheck_all_events"></dropdown-menu><span class="period">.</span>
+          </div>
+          <div class="section" ng-show="rsvp.hotels_enabled"><span ng-show="getGuestCount() == 0">I’ll </span><span
+              ng-show="getGuestCount() &gt; 0">We’ll </span><span> be hanging </span><span ng-show="getGuestCount() == 0">my
+              hat </span><span ng-show="getGuestCount() &gt; 0">our hats </span><span>at </span><input
+              ng-model="rsvp.hotel_location" placeholder="where you’re staying" type="text">.</input></div>
+          <div ng-show="rsvp.food_enabled">
+            <div ng-if="(!rsvp.guest || (rsvp.guest &amp;&amp; !rsvp.guest.is_group_party))">
+              <div class="section" ng-show="rsvp.food_appetizer_enabled"> <span>{{
+                  rsvp.rsvp_translations.rsvp_lib_food_appetizer }}</span> <select
+                  ng-model="rsvp.food_appetizer_my_response"
+                  ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select><span>.</span>
+              </div>
+              <div class="section" ng-show="rsvp.food_entree_enabled"> <span>{{ rsvp.rsvp_translations.rsvp_lib_food_entree
+                  }}</span> <select ng-model="rsvp.food_entree_my_response"
+                  ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span>.</span>
+              </div>
+              <div class="section" ng-show="rsvp.food_dessert_enabled"> <span>{{
+                  rsvp.rsvp_translations.rsvp_lib_food_dessert }}</span> <select ng-model="rsvp.food_dessert_my_response"
+                  ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>.</span>
+              </div>
+            </div>
+            <div class="guest-food section"
+              ng-if="rsvp.guest &amp;&amp; rsvp.guest.is_group_party &amp;&amp; rsvp.attending_response != &#39;AM NOT&#39;">
+              <span><span>{{rsvp.guest.full_name}} will have the </span><span ng-show="rsvp.food_appetizer_enabled"><select
+                    ng-model="rsvp.food_appetizer_my_response"
+                    ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select> <span
+                    ng-show="logicalXOR(rsvp.food_entree_enabled, rsvp.food_dessert_enabled)">and</span> <span
+                    ng-show="rsvp.food_entree_enabled &amp;&amp; rsvp.food_dessert_enabled">, </span><span
+                    ng-show="!rsvp.food_entree_enabled &amp;&amp; !rsvp.food_dessert_enabled">. </span></span><span
+                  ng-show="rsvp.food_entree_enabled"><select ng-model="rsvp.food_entree_my_response"
+                    ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span
+                    ng-show="rsvp.food_dessert_enabled">, </span><span
+                    ng-show="!rsvp.food_dessert_enabled">.</span></span><span ng-show="rsvp.food_dessert_enabled"><span
+                    ng-show="rsvp.food_appetizer_enabled || rsvp.food_entree_enabled"> and </span><select
+                    ng-model="rsvp.food_dessert_my_response"
+                    ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>.
+                  </span></span></span></div>
+            <div class="guest-food section"
+              ng-if="person.name != &#39;&#39; &amp;&amp; (person.attending_response == null || person.attending_response == &#39;AM&#39;)"
+              ng-repeat="person in rsvp.attending_bringing_list"><span><span
+                  ng-show="rsvp.food_appetizer_enabled || rsvp.food_entree_enabled || rsvp.food_dessert_enabled">{{person.name}}
+                  will have the </span><span ng-show="rsvp.food_appetizer_enabled"><select
+                    ng-model="rsvp.food_appetizer_guest_response[$index]"
+                    ng-options="option.value as option.name for option in rsvp.food_appetizer_options"></select> <span
+                    ng-show="logicalXOR(rsvp.food_entree_enabled, rsvp.food_dessert_enabled)">and</span> <span
+                    ng-show="rsvp.food_entree_enabled &amp;&amp; rsvp.food_dessert_enabled">, </span><span
+                    ng-show="!rsvp.food_entree_enabled &amp;&amp; !rsvp.food_dessert_enabled">. </span></span><span
+                  ng-show="rsvp.food_entree_enabled"><select ng-model="rsvp.food_entree_guest_response[$index]"
+                    ng-options="option.value as option.name for option in rsvp.food_entree_options"></select><span
+                    ng-show="!rsvp.food_dessert_enabled">. </span></span><span ng-show="rsvp.food_dessert_enabled"> <span
+                    ng-show="logicalXOR(rsvp.food_appetizer_enabled || rsvp.food_entree_enabled) &amp;&amp; rsvp.food_entree_enabled">and</span>
+                  <select ng-model="rsvp.food_dessert_guest_response[$index]"
+                    ng-options="option.value as option.name for option in rsvp.food_dessert_options"></select><span>.
+                  </span></span></span></div>
+          </div>
+          <div class="section" ng-show="rsvp.food_allergy_enabled"><span ng-show="getGuestCount() == 0">I </span><span
+              ng-show="getGuestCount() &gt; 0">We </span><select ng-model="rsvp.food_allergy_response"
+              ng-options="option.value as option.name for option in rsvp.food_allergy_options"></select> <span>{{
+              rsvp.rsvp_translations.rsvp_lib_food_allergy_have }}</span><span
+              ng-show="rsvp.food_allergy_response == &#39;DO NOT&#39;">.</span><span
+              ng-show="rsvp.food_allergy_response == &#39;DO&#39;">: </span><span class="food-allergy-container"
+              ng-show="rsvp.food_allergy_response == &#39;DO&#39;"><textarea ng-model="rsvp.food_allergy_explanation"
+                placeholder="Please explain the dietary restriction" style="vertical-align:middle;"></textarea></span></div>
+          <div class="section" ng-show="rsvp.gift_enabled"><span>You will love the super awesome</span><input
+              ng-model="rsvp.gift_item_response" placeholder="gift" type="text" /><span ng-show="getGuestCount() == 0">I
+            </span><span ng-show="getGuestCount() &gt; 0">we</span><span> got you from your registry at </span><input
+              ng-model="rsvp.gift_store_response" placeholder="registry / store" type="text">.</input></div>
+          <div class="section" ng-show="rsvp.song_enabled"><span>You’ll find </span><span ng-show="getGuestCount() == 0">me
+            </span><span ng-show="getGuestCount() &gt; 0">us </span><span> on the dance floor when they play </span><input
+              ng-model="rsvp.song_response" placeholder="song name" type="text">.</input></div>
+          <div class="section" id="contact"
+            ng-show="rsvp.contact_enabled &amp;&amp; (rsvp.contact_ask_name || rsvp.contact_ask_email || rsvp.contact_ask_phone || rsvp.contact_ask_address)">
+            <span ng-show="rsvp.contact_ask_name"><span class="contactim">I’m </span><input
+                ng-model="rsvp.contact_name_response" placeholder="your name" type="text" /><span
+                class="contactperiod">.</span></span><span
+              ng-if="rsvp.contact_ask_email || rsvp.contact_ask_phone || rsvp.contact_ask_address"><span class="text"> You
+                can ping me, ring me, or bring me more info at: </span></span>
+            <div class="contact-details"><span ng-show="rsvp.contact_ask_email"><input class="email"
+                  ng-model="rsvp.contact_email_response" placeholder="myemail@example.com" type="text" /></span>
+              <div ng-show="rsvp.contact_ask_phone"><input ng-model="rsvp.contact_phone_response"
+                  placeholder="(555) 555-1234" type="text" /></div>
+              <div ng-show="rsvp.contact_ask_address"><input ng-model="rsvp.contact_address1_response"
+                  placeholder="222 Broadway" type="text" /><input ng-model="rsvp.contact_address2_response"
+                  placeholder="New York, NY 10038" type="text" /><input ng-model="rsvp.contact_address3_response"
+                  ng-show="rsvp.contact_ask_address_lines == &#39;3&#39;" placeholder="United States" type="text" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="section" id="custom" ng-repeat="customSection in rsvp.custom_sections track by $index"
+          ng-show="rsvp.custom_enabled"><span
+            ng-show="rsvp.attending_response != &#39;AM NOT&#39; || customSection.nonattending_enabled"
+            style="display:block;">
+            <div><span ng-bind-html="customSection.copy" style="word-break: break-word;"></span><br /><span
+                ng-if="customSection.response_type == &#39;1&#39;"><textarea
+                  ng-model="customSection.response"></textarea></span><span
+                ng-if="customSection.response_type == &#39;2&#39;"><select ng-model="customSection.dropdown_response"
+                  ng-options="option.value as option.value for option in customSection.dropdown_options"></select></span><span
+                ng-if="customSection.response_type == &#39;3&#39;">
+                <dropdown-menu list-items="getCustomSectionMultiSelectorOptions(customSection)"
+                  name="custom_section_dropdown_{{$index}}" ng-model="customSection.dropdown_responses"
+                  noun="&#39;selection&#39;" nounp="&#39;selections&#39;" uncheck-all="true"></dropdown-menu>
+              </span></div>
+          </span>
+          <div ng-if="$last" style="margin-bottom: 60px;"></div>
+        </div><button id="rg-rsvp-v3-submit" ng-click="submitRsvp()">Submit</button>
+      </div>
+      <script id="dropdownMenu.html"
+        type="text/ng-template"><div class="ng-dropdown-menu" data-guest-name="{{ guestName }}" id="{{ name }}"><select class="highlight" id="{{ name }}-a" ng-model="fakeSelectOption" ng-options="o for o in options"></select><div class="dropdown-menu-panel" id="{{ name }}-b" ng-class="{&#39;should-hide&#39;: shouldHide}"><div class="optional"><span class="close" ng-click="shouldHide = !shouldHide">&#10006</span><div class="items"><nobr ng-repeat="item in listItems track by $index" style="display: block;"><input check-list="ngModel" class="select-days-box" ng-checked="ngModel.indexOf(item) != -1" type="checkbox" value="{{ item }}" /><span class="delegate-label">{{ item }}</span></nobr></div></div></div></div></script>
     </div>
   </div>
 
