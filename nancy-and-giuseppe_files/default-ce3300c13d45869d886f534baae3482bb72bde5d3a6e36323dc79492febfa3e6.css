@@ -2,6 +2,6 @@
 
 @font-face {
     font-family: 'ProximaNova-Regular';
-    src: url(https://assets.rileygrey.com/assets/279EF0_8_0-322f1fed1c44191d7a5cb064fbb87048ff2f6b54314c436b85a73cc82d586516.eot);
-    src: url(https://assets.rileygrey.com/assets/279EF0_8_0-322f1fed1c44191d7a5cb064fbb87048ff2f6b54314c436b85a73cc82d586516.eot?#iefix) format("embedded-opentype"), url(https://assets.rileygrey.com/assets/279EF0_8_0-ed011b4299e89daa6adb69af29f1d334d4def67b3798b8a4f8d3e4f85ff731f9.woff) format("woff"), url(https://assets.rileygrey.com/assets/279EF0_8_0-0278f72f518678c641dbc09f59c527cae4da9aadadd2f563d4f374d9bd1a4dfc.ttf) format("truetype")
+    src: url(/assets/279EF0_8_0-322f1fed1c44191d7a5cb064fbb87048ff2f6b54314c436b85a73cc82d586516.eot);
+    src: url(/assets/279EF0_8_0-322f1fed1c44191d7a5cb064fbb87048ff2f6b54314c436b85a73cc82d586516-iefix.eot?#iefix) format("embedded-opentype"), url(/assets/279EF0_8_0-ed011b4299e89daa6adb69af29f1d334d4def67b3798b8a4f8d3e4f85ff731f9.woff) format("woff"), url(/assets/279EF0_8_0-0278f72f518678c641dbc09f59c527cae4da9aadadd2f563d4f374d9bd1a4dfc.ttf) format("truetype")
 }
